@@ -1,7 +1,3 @@
-__YOUTUBE USER GUARD HAS MOVED TO GITHUB__
-
-[github.com/kwerty/YouTube-User-Guard](https://github.com/kwerty/YouTube-User-Guard)
-
 YouTube User Guard
 ==================
 
