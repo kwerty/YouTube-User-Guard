@@ -1,0 +1,25 @@
+{
+	"name": "YouTube User Guard",
+	"version": "0.95",
+	"manifest_version": 2,
+	"description": "Stay logged in to YouTube",
+	"permissions": ["cookies", "experimental", "tabs", "http://*/*"],
+	"background": {
+		"scripts": [ "background.js" ]
+	},
+	"options_page": "options.html",
+	"content_scripts": [{
+		"matches": ["http://www.youtube.com/*"],
+		"js": ["content.js"]
+	}],
+	"icons": {
+		"128": "img/128.png",
+		"48": "img/48.png",
+		"16": "img/16.png"
+	},
+	"web_accessible_resources": [
+		"patch.js"
+	]
+}
+
+

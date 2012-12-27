@@ -1,0 +1,16 @@
+
+* {
+	font-family: Arial;
+	font-size: 15px;
+}
+
+button {
+	float: left;
+	margin-left: 5px;
+	padding: 4px 15px 4px 15px;
+}
+
+div {
+	float: left;
+	margin-top: 9px;
+}

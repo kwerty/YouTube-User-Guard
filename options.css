@@ -1,0 +1,19 @@
+body {
+	font-family: Arial;
+	text-align: center;
+}
+
+h1 {
+	font-size: 28px;
+}
+
+button {
+	padding: 4px 15px 4px 15px;
+	margin-left: 5px;
+}
+
+p {
+	width: 300px;
+	margin: 0px auto;
+	font-size: 14px;
+}
