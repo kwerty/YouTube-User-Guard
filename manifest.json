@@ -1,15 +1,15 @@
 {
 	"name": "YouTube User Guard",
-	"version": "0.95",
+	"version": "0.96",
 	"manifest_version": 2,
 	"description": "Stay logged in to YouTube",
-	"permissions": ["cookies", "experimental", "tabs", "http://*/*"],
+	"permissions": ["cookies", "experimental", "tabs", "http://*/*", "https://*/*"],
 	"background": {
 		"scripts": [ "background.js" ]
 	},
 	"options_page": "options.html",
 	"content_scripts": [{
-		"matches": ["http://www.youtube.com/*"],
+		"matches": ["http://www.youtube.com/*", "https://www.youtube.com/*", "http://youtube.com/*", "http://youtube.com/*"],
 		"js": ["content.js"]
 	}],
 	"icons": {
