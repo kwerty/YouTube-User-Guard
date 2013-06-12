@@ -1,6 +1,6 @@
 {
 	"name": "YouTube User Guard",
-	"version": "0.96",
+	"version": "0.961",
 	"manifest_version": 2,
 	"description": "Stay logged in to YouTube",
 	"permissions": ["cookies", "experimental", "tabs", "http://*/*", "https://*/*"],
