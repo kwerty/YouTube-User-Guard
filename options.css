@@ -1,19 +1,27 @@
 body {
-	font-family: Arial;
-	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
-h1 {
-	font-size: 28px;
+div {
+    margin: 0px auto;
+}
+
+.logo {
+    height: 128px;
+    width: 128px;
+    background: url('img/128.png');
+}
+
+.content {
+    width: 500px;
+    text-align: center;
 }
 
 button {
-	padding: 4px 15px 4px 15px;
+	padding: 4px;
 	margin-left: 5px;
 }
 
-p {
-	width: 300px;
-	margin: 0px auto;
-	font-size: 14px;
+#FirstTime {
+    display: none;
 }

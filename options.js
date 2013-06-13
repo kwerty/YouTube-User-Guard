@@ -1,28 +1,22 @@
-function loadOptions() {
-
-	if (!localStorage['notfirst'])
-		document.getElementById('MessageSpan').innerHTML = 'Thanks for downloading YouTube User Guard';
-	
-	localStorage['notfirst'] = true;
-
-	updateStatus(localStorage['enabled'] ? true : false);
-}
-
-function updateStatus(enabled) {
-	document.getElementById('EnabledMessage').style.display = enabled ? '' : 'none';
-	document.getElementById('DisabledMessage').style.display = !enabled ? '' : 'none';
-}
-
-function disable() {
-	chrome.extension.sendMessage({logout: true});
-	updateStatus(false);
-}
 
 window.addEventListener('load', function() {
 
-	loadOptions();
+	if (localStorage['firstTime']) {
+		document.getElementById('FirstTime').style.display = null;
+        localStorage.removeItem('firstTime');
+    }
+    
+	updateStatus(localStorage['active']);
 		
-	document.getElementById('ResetButton').addEventListener('click', disable);
+	document.getElementById('DeactivateButton').addEventListener('click', function() {
+        chrome.extension.sendMessage({disableGuard: true});
+        updateStatus(false);
+    });
 
 });
+
+function updateStatus(active) {
+	document.getElementById('Active').style.display = active ? null : 'none';
+	document.getElementById('NotActive').style.display = !active ? null : 'none';
+}
 
