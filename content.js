@@ -1,5 +1,5 @@
 
-chrome.extension.sendMessage({showInfobar: true});
+chrome.extension.sendMessage({show: true});
 
 var patch = document.createElement('script');  
 patch.src = chrome.extension.getURL('patch.js')

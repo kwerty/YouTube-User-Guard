@@ -1,14 +1,16 @@
+function dismiss(action) {
+	chrome.extension.sendMessage({'dismiss': true, 'action': action});
+	window.close();
+}
+
 window.addEventListener('load', function() {
 
 	document.getElementById('YesButton').addEventListener('click', function() {
-	
-		chrome.extension.sendMessage({enable: true});
-		window.close();
-		
+		dismiss(true);
 	});
 	
 	document.getElementById('NoButton').addEventListener('click', function() {
-		window.close();
+		dismiss(false);
 	});
 
 });
