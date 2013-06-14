@@ -76,7 +76,7 @@ chrome.cookies.onChanged.addListener(function(info) {
 });
 
 function getScheme(cookieName) {
-    return ['SSID', 'SAPISID', 'GAPS', 'GALX', 'LSID'].indexOf(cookieName) != -1 ? 'https' : 'http';
+    return ['SSID', 'SAPISID'].indexOf(cookieName) != -1 ? 'https' : 'http';
 }
 
 function saveYoutubeCookies(cookie) {
@@ -99,9 +99,11 @@ function saveYoutubeCookies(cookie) {
         chrome.cookies.getAll({name: 'SSID'}, removeGoogleCookies);
         chrome.cookies.getAll({name: 'APISID'}, removeGoogleCookies);
         chrome.cookies.getAll({name: 'SAPISID'}, removeGoogleCookies);
-        chrome.cookies.getAll({name: 'GAPS'}, removeGoogleCookies);
-        chrome.cookies.getAll({name: 'GALX'}, removeGoogleCookies);
-        chrome.cookies.getAll({name: 'LSID'}, removeGoogleCookies);
+        
+        chrome.cookies.remove({url: 'https://accounts.google.com', name: 'GAPS'});
+        chrome.cookies.remove({url: 'https://accounts.google.com', name: 'GALX'});
+        chrome.cookies.remove({url: 'https://accounts.google.com', name: 'LSID'});
+
     }
 }
 
@@ -109,11 +111,8 @@ function removeGoogleCookies(cookies) {
 
     cookies.forEach(function(cookie) {
 
-        if (['SID', 'HSID', 'SSID', 'APISID', 'SAPISID'].indexOf(cookie.name) != -1 &&
-            cookie.value != localStorage[cookie.name])
-            return;
-            
-        if (cookie.domain.slice(-12) == '.youtube.com')
+        if (cookie.value != localStorage[cookie.name] &&
+            cookie.domain.slice(-12) == '.youtube.com')
             return;
 
         chrome.cookies.remove({url: getScheme(cookie.name) + '://' + cookie.domain, name: cookie.name});
