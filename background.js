@@ -29,6 +29,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.cookies.get({url: 'http://youtube.com', name: 'SID'}, saveYoutubeCookies);
         chrome.cookies.get({url: 'http://youtube.com', name: 'HSID'}, saveYoutubeCookies);
         chrome.cookies.get({url: 'https://youtube.com', name: 'SSID'}, saveYoutubeCookies);
+        chrome.cookies.get({url: 'https://youtube.com', name: 'APISID'}, saveYoutubeCookies);
+        chrome.cookies.get({url: 'https://youtube.com', name: 'SAPISID'}, saveYoutubeCookies);
 	}
 	
 	else if (request['disableGuard']) {
@@ -36,6 +38,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         localStorage.removeItem('SID');
         localStorage.removeItem('HSID');
         localStorage.removeItem('SSID');
+        localStorage.removeItem('APISID');
+        localStorage.removeItem('SAPISID');
 	}
 	
 
@@ -45,12 +49,10 @@ chrome.cookies.onChanged.addListener(function(info) {
 
 	if (!localStorage['active'] ||
 		info.cookie.domain.slice(-12) != '.youtube.com' || 
-		[ 'SID', 'HSID', 'SSID' ].indexOf(info.cookie.name) == -1)
+		[ 'SID', 'HSID', 'SSID', 'APISID', 'SAPISID' ].indexOf(info.cookie.name) == -1)
         return;
         
-    scheme = info.cookie.name != 'SSID' ? 'http' : 'https';
-    
-	chrome.cookies.get({url: scheme + '://youtube.com', name: info.cookie.name}, function(cookie) {
+	chrome.cookies.get({url: getScheme(info.cookie.name) + '://youtube.com', name: info.cookie.name}, function(cookie) {
 		
 		if (cookie && 
             cookie.value == localStorage[info.cookie.name] &&
@@ -60,10 +62,10 @@ chrome.cookies.onChanged.addListener(function(info) {
 		chrome.cookies.set({
 			name: info.cookie.name,
 			value: localStorage[info.cookie.name],
-			url: (info.cookie.name != 'SSID' ? 'http' : 'https') + '://youtube.com',
+			url: getScheme(info.cookie.name) + '://youtube.com',
 			domain: '.youtube.com',
 			path: '/',
-            secure: info.cookie.name == 'SSID',
+            secure: getScheme(info.cookie.name) == 'https',
 			expirationDate: 3133333337,
 		});
 
@@ -73,6 +75,10 @@ chrome.cookies.onChanged.addListener(function(info) {
 	
 });
 
+function getScheme(cookieName) {
+    return ['SSID', 'SAPISID', 'GAPS', 'GALX', 'LSID'].indexOf(cookieName) != -1 ? 'https' : 'http';
+}
+
 function saveYoutubeCookies(cookie) {
 
     if (!cookie)
@@ -80,14 +86,22 @@ function saveYoutubeCookies(cookie) {
         
     localStorage[cookie.name] = cookie.value;
     
-    if (localStorage['SID'] && localStorage['HSID'] && localStorage['SSID']) {
+    if (localStorage['SID'] && 
+        localStorage['HSID'] && 
+        localStorage['SSID'] &&
+        localStorage['APISID'] && 
+        localStorage['SAPISID']) {
     
         localStorage['active'] = true;
         
         chrome.cookies.getAll({name: 'SID'}, removeGoogleCookies);
         chrome.cookies.getAll({name: 'HSID'}, removeGoogleCookies);
         chrome.cookies.getAll({name: 'SSID'}, removeGoogleCookies);
-        
+        chrome.cookies.getAll({name: 'APISID'}, removeGoogleCookies);
+        chrome.cookies.getAll({name: 'SAPISID'}, removeGoogleCookies);
+        chrome.cookies.getAll({name: 'GAPS'}, removeGoogleCookies);
+        chrome.cookies.getAll({name: 'GALX'}, removeGoogleCookies);
+        chrome.cookies.getAll({name: 'LSID'}, removeGoogleCookies);
     }
 }
 
@@ -95,13 +109,14 @@ function removeGoogleCookies(cookies) {
 
     cookies.forEach(function(cookie) {
 
-        if (cookie.value != localStorage[cookie.name] ||
-            cookie.domain.slice(-12) == '.youtube.com')
+        if (['SID', 'HSID', 'SSID', 'APISID', 'SAPISID'].indexOf(cookie.name) != -1 &&
+            cookie.value != localStorage[cookie.name])
+            return;
+            
+        if (cookie.domain.slice(-12) == '.youtube.com')
             return;
 
-        scheme = cookie.name != 'SSID' ? 'http' : 'https';
-        
-        chrome.cookies.remove({url: scheme + '://' + cookie.domain, name: cookie.name});
+        chrome.cookies.remove({url: getScheme(cookie.name) + '://' + cookie.domain, name: cookie.name});
 
     });
     
